@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f4f8;
+            margin: 0;
+            padding: 40px 15px;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: auto;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px #0002;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2563eb;
+        }
+
+        form {
+            display: flex;
+            gap: 8px;
+        }
+
+        input {
+            flex: 1;
+            min-width: 0;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        button {
+            padding: 10px 14px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            color: white;
+            background: #2563eb;
+        }
+
+        ul {
+            padding: 0;
+            list-style: none;
+        }
+
+        li {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .task-name {
+            flex: 1;
+            overflow-wrap: anywhere;
+        }
+
+        .completed {
+            text-decoration: line-through;
+            color: gray;
+        }
+
+        .delete {
+            background: #dc2626;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Task Manager</h1>
+        <p>Add and manage your daily tasks!</p>
+
+        <form action="/add" method="POST">
+            <input type="text" name="task"
+                   placeholder="Enter a new task" required>
+            <button type="submit">Add</button>
+        </form>
+
+        <ul>
+            {% for task in tasks %}
+            {% set task_id = loop.index0 %}
+            <li>
+                <span class="task-name {% if task.completed %}completed{% endif %}">
+                    {{ task.name }}
+                </span>
+
+                <a href="{{ url_for('complete_task', task_id=task_id) }}">
+                    <button type="button">
+                        {% if task.completed %}Undo{% else %}Done{% endif %}
+                    </button>
+                </a>
+
+                <a href="{{ url_for('delete_task', task_id=task_id) }}">
+                    <button type="button" class="delete">Delete</button>
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>
